@@ -19,18 +19,27 @@ namespace RatingAdjustment.Services
          * 
          * Returns: [0, 1]
          */
-        void SetPercentPositive(double stars)
+        public void SetPercentPositive(double stars)
         {
             // TODO: Implement this!
+            _percent_positive = stars * 2 / 10;
         }
 
         /**
          * Calculate "Q" given the formula in the problem statement
          */
-        void SetQ(double number_of_ratings)
+        public void SetQ(double number_of_ratings)
         {
-         // TODO: Implement this!
+            // TODO: Implement this!
+
+            var n = number_of_ratings;
+
+            // p̂, the fraction of upvotes
+            var phat = _percent_positive;
+
+            _q = (phat + Z * Z / (2 * n) - Z * Math.Sqrt((phat * (1 - phat) + Z * Z / (4 * n)) / n)) / (1 + Z * Z / n);
         }
+
 
         /** Adjusted lower bound
          * 
@@ -38,9 +47,12 @@ namespace RatingAdjustment.Services
          * 
          * Returns: a double, up to 5
          */
-        public double Adjust(double stars, double number_of_ratings) {
+        public double Adjust(double stars, double number_of_ratings)
+        {
             // TODO: Implement this!
-            return 0.0;
+            var phat = 1.0 * number_of_ratings / stars;
+            var n = number_of_ratings;
+            return (phat + Z * Z / (2 * n) - Z * Math.Sqrt((phat * (1 - phat) + Z * Z / (4 * n)) / n)) / (1 + Z * Z / n);
         }
     }
 }

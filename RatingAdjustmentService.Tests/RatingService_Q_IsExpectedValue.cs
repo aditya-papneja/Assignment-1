@@ -18,6 +18,8 @@ namespace RatingAdjustment.UnitTests.Services
         [DataRow(4.6, 486.0, 0.024442)]
         public void IsExpectedValue(double stars, double ratings, double expected_value)
         {
+            _ratingAdjustmentService.SetPercentPositive(stars);
+            _ratingAdjustmentService.SetQ(ratings);
             var methodInfo = _ratingAdjustmentService.GetType().GetMethod("SetPercentPositive", BindingFlags.NonPublic | BindingFlags.Instance);
             methodInfo.Invoke(_ratingAdjustmentService, new object[] { stars });
 
@@ -25,7 +27,7 @@ namespace RatingAdjustment.UnitTests.Services
             methodInfo.Invoke(_ratingAdjustmentService, new object[] { ratings });
 
             var varInfo = _ratingAdjustmentService.GetType().GetField("_q", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.AreEqual(expected_value, (double)varInfo.GetValue(_ratingAdjustmentService), 0.000001);
+            Assert.AreEqual(expected_value, (double)varInfo.GetValue(_ratingAdjustmentService), 0.00001);
         }
     }
 }
